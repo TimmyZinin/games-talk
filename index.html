@@ -43,11 +43,14 @@ body::after{
 .deck{display:flex;height:100vh;width:max-content;overflow:hidden;transition:transform .45s cubic-bezier(.4,0,.2,1)}
 .slide{
   min-width:100vw;width:100vw;height:100vh;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:80px clamp(36px,7vw,140px);
-  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-start;
+  padding:88px clamp(36px,7vw,140px) 70px;
+  position:relative;overflow-y:auto;overflow-x:hidden;
   border-right:4px solid var(--black);flex-shrink:0;
 }
+.slide::-webkit-scrollbar{width:8px}
+.slide::-webkit-scrollbar-thumb{background:var(--red);border:2px solid var(--bg)}
+.slide::-webkit-scrollbar-track{background:var(--bg)}
 
 /* arrows */
 .arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;background:var(--yellow);border:3px solid var(--black);box-shadow:3px 3px 0 var(--black);cursor:pointer;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;transition:all .15s;color:var(--black);font-family:var(--mono)}
@@ -116,7 +119,7 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
 .dots-bg > *{position:relative;z-index:1}
 
 /* tool slide */
-.tool-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:start;margin-top:20px}
+.tool-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:32px;align-items:start;margin-top:14px}
 .tool-shot{position:relative;border:4px solid var(--black);box-shadow:6px 6px 0 var(--red);overflow:hidden;background:var(--black)}
 .tool-shot img{display:block;width:100%;height:auto}
 .tool-shot::after{content:attr(data-host);position:absolute;left:14px;top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;background:var(--red);color:var(--white);padding:4px 10px;text-transform:uppercase;z-index:2;border:2px solid var(--black);font-weight:700}
@@ -181,6 +184,19 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   .slide{padding:60px 22px}
   .slide-number{left:22px}
 }
+
+.quick-ref{margin-top:14px;border:3px solid var(--black);box-shadow:4px 4px 0 var(--black);background:var(--white);overflow:hidden}
+.qr-row{display:grid;grid-template-columns:84px 1fr;border-bottom:2px solid var(--black)}
+.qr-row:last-child{border-bottom:none}
+.qr-label{background:var(--red);color:var(--white);font-family:var(--display);font-size:12px;padding:8px 8px;display:flex;flex-direction:column;justify-content:center;letter-spacing:.04em;text-transform:uppercase;line-height:1.05}
+.qr-row:nth-child(2) .qr-label{background:var(--black);color:var(--yellow)}
+.qr-row:nth-child(3) .qr-label{background:var(--yellow);color:var(--black)}
+.qr-tag-tr{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;opacity:.85;text-transform:uppercase;margin-top:3px}
+.qr-text{padding:8px 12px;display:flex;flex-direction:column;gap:3px;justify-content:center}
+.qr-en{font-size:13px;line-height:1.35;color:var(--black);margin:0}
+.qr-tr{font-size:12px;line-height:1.35;color:#555;font-style:italic;margin:0}
+.qr-flag{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.12em;background:var(--black);color:var(--yellow);padding:1px 5px;margin-right:6px;vertical-align:middle;font-style:normal}
+@media(max-width:900px){.qr-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -525,12 +541,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <h2><span class="red">Claude</span> Code</h2>
   <div class="tool-grid">
     <div>
-      <p><span class="lang-tag">EN</span> Anthropic's terminal-native coding agent. <strong>Largest context window on the market</strong> — drop a whole Unity project in and it remembers it. Best for refactors, generating C# scripts, shaders, gameplay code.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Anthropic'in terminal tabanlı kod ajanı. Piyasadaki en büyük bağlam penceresi. Refactor, C# script ve oynanış kodu için en iyisi.</p>
-      <div class="card-yellow" style="margin-top:14px">
+      <div class="card-yellow" style="margin-top:12px;padding:14px 16px">
         <h3>Used in: Marina · Kloaka · Afterhumans</h3>
         <p>In <strong>Marina</strong> Claude wrote the full state machine, the funnel, the win/lose, the 4th-wall finale. In <strong>Kloaka</strong> — enemy AI, upgrade system, HTML overlay CTA. <strong class="red">My main tool.</strong></p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Anthropic's terminal coding agent — edits files, runs commands, ships code from the CLI.</p><p class="qr-tr"><span class="qr-flag">TR</span>Anthropic'in terminal kodlama ajanı — dosya düzenler, komut çalıştırır, CLI'dan kod yollar.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Game prototypes, refactoring engine code, generating shaders, automating asset pipelines.</p><p class="qr-tr"><span class="qr-flag">TR</span>Oyun prototipi, motor kodu refactor, shader üretimi, asset pipeline otomasyonu.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>No free tier — Pro $20/mo, Max $100–200/mo, or API pay-as-you-go (~$5 trial credit).</p><p class="qr-tr"><span class="qr-flag">TR</span>Ücretsiz plan yok — Pro $20/ay, Max $100–200/ay veya API kullanım bazlı (~$5 deneme).</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">claude.com/code</span>
         <span class="tag">CLI agent</span>
@@ -549,12 +569,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <div class="tool-grid">
     <div class="tool-shot" data-host="aitmpl.com" style="box-shadow:6px 6px 0 var(--yellow)"><img src="img/aitmpl.jpg" alt="aitmpl.com — Claude Code Templates"></div>
     <div>
-      <p><span class="lang-tag">EN</span> A free public library of Claude Code templates: <strong>1000+ skills, agents, commands and MCP integrations</strong>, contributed by the community and ready to install in one line. Instead of building every helper from scratch, you grab one off the shelf.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Claude Code şablonlarının ücretsiz halka açık kütüphanesi: 1000+ skill, ajan, komut ve MCP entegrasyonu. Her yardımcıyı sıfırdan yazmak yerine raftan alıyorsun.</p>
-      <div class="card-red" style="margin-top:14px">
+      <div class="card-red" style="margin-top:12px;padding:14px 16px">
         <h3 class="red">Game-dev ready: agents &amp; skills</h3>
         <p>Drop-in agents for game work: <strong>game-designer · unity-game-developer · game-developer · 3d-artist</strong>. Plus skills that pair perfectly with games: <strong>frontend-design · canvas-design · brainstorming · webapp-testing</strong>. And — <strong>skill-creator</strong> if your perfect tool isn't there yet.</p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Open catalog of Claude Code agents, skills, slash commands and MCP servers — install in one line.</p><p class="qr-tr"><span class="qr-flag">TR</span>Açık Claude Code ajan, skill, slash komut ve MCP kataloğu — tek satırlık komutla kurulur.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Bolting ready-made review, testing, 3D-asset and game-dev workflows onto Claude Code.</p><p class="qr-tr"><span class="qr-flag">TR</span>Hazır review, test, 3D-asset ve oyun-geliştirme workflow'larını Claude Code'a eklemek.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Fully free and open source (MIT) — you only pay for Claude Code itself.</p><p class="qr-tr"><span class="qr-flag">TR</span>Tamamen ücretsiz ve açık kaynak (MIT) — sadece Claude Code ücreti var.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">aitmpl.com</span>
         <span class="tag">Free · open</span>
@@ -571,12 +595,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <h2><span class="red">Codex</span> CLI</h2>
   <div class="tool-grid">
     <div>
-      <p><span class="lang-tag">EN</span> OpenAI's <strong>read-only code review agent</strong>. Runs in a sandbox, can't write files, can't lie about what's there. I use it as a second pair of eyes after Claude finishes a sprint — and it's caught fabricated assets, drifted READMEs, inflated self-grades.</p>
-      <p class="tr"><span class="lang-tag">TR</span> OpenAI'nin salt-okunur inceleme ajanı. Sandbox'ta çalışır, yazmaz, yalan söyleyemez. Claude bir sprint bitirince ikinci göz olarak kullanırım.</p>
-      <div class="card-yellow" style="margin-top:14px">
+      <div class="card-yellow" style="margin-top:12px;padding:14px 16px">
         <h3>Caught the inflated 9.2 grades in Afterhumans</h3>
         <p>Codex's audit found that <strong>"9.2/10 sprint" reports were really 7.8</strong> — missing photo_nikolai.png, drifted art-direction docs, dual HITL skipped. Without it I would have polished a fiction.</p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>OpenAI's CLI coding agent — runs in a read-only sandbox for independent code review and audits.</p><p class="qr-tr"><span class="qr-flag">TR</span>OpenAI'nin CLI kodlama ajanı — bağımsız kod review ve denetim için salt-okunur sandbox.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Adversarial review of game logic, save/load bugs, security audit before shipping a build.</p><p class="qr-tr"><span class="qr-flag">TR</span>Build göndermeden önce oyun mantığı, save/load bug'ları ve güvenlik için adversarial review.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>CLI is open source (Apache 2.0) — usage billed via ChatGPT Plus/Pro or OpenAI API key.</p><p class="qr-tr"><span class="qr-flag">TR</span>CLI açık kaynak (Apache 2.0) — kullanım ChatGPT Plus/Pro veya OpenAI API anahtarıyla.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">github.com/openai/codex</span>
         <span class="tag">Read-only</span>
@@ -595,12 +623,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <div class="tool-grid">
     <div class="tool-shot" data-host="tripo3d.ai"><img src="img/tripo.jpg" alt="Tripo"></div>
     <div>
-      <p><span class="lang-tag">EN</span> Text or image into a <strong>game-ready 3D mesh in 60 seconds</strong>. Quad topology, GLB / FBX / USDZ export. The model walks straight into Unity or Three.js without a Blender step. Free tier: 600 credits / month.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Metin veya görselden 60 saniyede oyuna hazır 3D model. Quad topoloji, doğrudan Unity'ye girer.</p>
-      <div class="card-red" style="margin-top:14px">
+      <div class="card-red" style="margin-top:12px;padding:14px 16px">
         <h3 class="red">11 enemy &amp; boss meshes for Kloaka Pechali</h3>
         <p>Every enemy in <strong>Kloaka</strong> — the yellow drone-CV, LinkedIn vampire, HR-bog frog, final-boss interviewer — started as a Tripo prompt. <strong class="red">14 attempted, 11 shipped, 26 MB total.</strong></p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Text- or image-to-3D mesh generator with rigging and PBR texturing.</p><p class="qr-tr"><span class="qr-flag">TR</span>Metin veya görselden 3D mesh üreten araç — rigging ve PBR doku desteği var.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Drafting characters, props and environment assets for Unity / Unreal / Godot from one prompt.</p><p class="qr-tr"><span class="qr-flag">TR</span>Tek prompt'tan Unity / Unreal / Godot için karakter, prop ve çevre asset'i üretmek.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free: ~600 credits/mo (~24 models), CC BY 4.0 only — no commercial use; Pro $19.90/mo.</p><p class="qr-tr"><span class="qr-flag">TR</span>Ücretsiz: ~600 kredi/ay (~24 model), sadece CC BY 4.0 — ticari yok; Pro $19.90/ay.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">tripo3d.ai</span>
         <span class="tag">GLB · FBX · USDZ</span>
@@ -617,12 +649,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <h2><span class="red">Meshy</span> AI</h2>
   <div class="tool-grid">
     <div>
-      <p><span class="lang-tag">EN</span> Tripo's main rival. <strong>Most mature ecosystem</strong> — first-party plugins for Unity, Blender, Unreal. Clean topology, retexturing flow. If you commit a studio to a single 3D-mesh AI, Meshy wins on plugin maturity.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Tripo'nun ana rakibi. En olgun ekosistem — Unity / Blender / Unreal eklentileri yerleşik.</p>
-      <div class="card-yellow" style="margin-top:14px">
+      <div class="card-yellow" style="margin-top:12px;padding:14px 16px">
         <h3>Studied as a Tripo replacement</h3>
         <p>Tried <strong>Meshy</strong> when Tripo started rate-limiting on free tier. Output equally usable, the Unity plugin saved a copy-paste step. <strong>Solo: Tripo for cost. Team: Meshy for ergonomics.</strong></p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Text- or image-to-3D mesh tool with auto-rigging, retopology and AI texturing.</p><p class="qr-tr"><span class="qr-flag">TR</span>Metin veya görselden 3D mesh — otomatik rigging, retopoloji ve AI doku içerir.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Game-ready low-poly props and characters; texture maps for existing meshes.</p><p class="qr-tr"><span class="qr-flag">TR</span>Oyuna hazır low-poly prop ve karakter; mevcut mesh'lere doku haritaları.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free: 100 credits/mo, 10 downloads/mo, no commercial rights; Pro $20/mo.</p><p class="qr-tr"><span class="qr-flag">TR</span>Ücretsiz: 100 kredi/ay, 10 indirme/ay, ticari hak yok; Pro $20/ay.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">meshy.ai</span>
         <span class="tag">Unity / Blender / Unreal</span>
@@ -641,12 +677,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <div class="tool-grid">
     <div class="tool-shot" data-host="hyper3d.ai" style="box-shadow:6px 6px 0 var(--yellow)"><img src="img/rodin.jpg" alt="Hyper3D Rodin"></div>
     <div>
-      <p><span class="lang-tag">EN</span> One more option in the AI-3D shelf. <strong>Photorealism, 4K PBR, 10B parameters.</strong> Slower, paid, heavier — but the best output of the three when realism matters more than stylisation.</p>
-      <p class="tr"><span class="lang-tag">TR</span> AI-3D rafındaki bir başka seçenek. Fotogerçekçilik, 4K PBR. Stilizasyon değil gerçekçilik istendiğinde.</p>
-      <div class="card-red" style="margin-top:14px">
+      <div class="card-red" style="margin-top:12px;padding:14px 16px">
         <h3 class="red">When to reach for it</h3>
         <p>Not for game art — stylised meshes (Tripo/Meshy) look better in WebGL builds. <strong>Rodin shines for product visualisation, dashboards, photoreal renders</strong> — anything where "this looks rendered" is the wrong reaction.</p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Hyper3D Rodin Gen-2 — image-to-3D with 4K PBR textures and high-poly meshes.</p><p class="qr-tr"><span class="qr-flag">TR</span>Hyper3D Rodin Gen-2 — görselden 3D, 4K PBR doku ve yüksek poligon mesh.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Hero assets, hard-surface props and detailed creatures where texture quality matters.</p><p class="qr-tr"><span class="qr-flag">TR</span>Doku kalitesi önemli olan hero asset, hard-surface prop ve detaylı yaratık üretimi.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free signup with a few trial credits; Creator $20 first month / $30 after, 30 credits.</p><p class="qr-tr"><span class="qr-flag">TR</span>Kayıtta birkaç deneme kredisi; Creator ilk ay $20, sonra $30/ay (30 kredi).</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">hyper3d.ai</span>
         <span class="tag">4K PBR</span>
@@ -663,12 +703,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <h2><span class="red">Marble</span> · World Labs</h2>
   <div class="tool-grid">
     <div>
-      <p><span class="lang-tag">EN</span> Fei-Fei Li's first commercial product, launched November 2025. Take a photo or write a prompt, get back a <strong>walkable 3D world</strong> — Gaussian splats plus mesh export. You can drop the result straight into Three.js or Unity.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Fei-Fei Li'nin ilk ticari ürünü, Kasım 2025. Bir fotoğraf veya prompt — gezilebilir 3D dünya. Three.js'e doğrudan girer.</p>
-      <div class="card-yellow" style="margin-top:14px">
+      <div class="card-yellow" style="margin-top:12px;padding:14px 16px">
         <h3>Next experiment for Afterhumans worlds</h3>
         <p>My next game build will not have a 3D modeller in the pipeline at all. The grey room in <strong>Afterhumans</strong> is what Marble is built for — and Marble exports the same GLB I was building by hand.</p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>World Labs Marble — turns a photo or prompt into a walkable, persistent 3D world.</p><p class="qr-tr"><span class="qr-flag">TR</span>World Labs Marble — fotoğraf veya prompt'u gezilebilir, kalıcı 3D dünyaya çevirir.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Greyboxing levels, concept environments and VR scenes without modeling them by hand.</p><p class="qr-tr"><span class="qr-flag">TR</span>El ile modellemeden level greybox, konsept ortam ve VR sahne hazırlamak.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free: 4 worlds/mo, no commercial rights; Standard $20/mo, Pro $35/mo (commercial).</p><p class="qr-tr"><span class="qr-flag">TR</span>Ücretsiz: 4 dünya/ay, ticari hak yok; Standard $20/ay, Pro $35/ay (ticari).</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">worldlabs.ai</span>
         <span class="tag">Splats + mesh</span>
@@ -687,12 +731,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <div class="tool-grid">
     <div class="tool-shot" data-host="deepmind.google" style="box-shadow:6px 6px 0 var(--blue)"><img src="img/genie.jpg" alt="Genie 3"></div>
     <div>
-      <p><span class="lang-tag">EN</span> Google DeepMind's playable-world model. <strong>720p · 24fps · ~60s to generate · navigable in real time.</strong> Write a sentence, walk through the result on the spot, decide if it's the world you wanted.</p>
-      <p class="tr"><span class="lang-tag">TR</span> DeepMind'ın oynanabilir dünya modeli. Bir cümle yaz, içinde yürü.</p>
       <div class="card-blue" style="margin-top:14px">
         <h3>Reference for "what's next"</h3>
         <p>Currently US-only via AI Ultra. We can't ship a Genie 3 game tomorrow — but it's the reference for what every world-AI tool will look like by end of 2026. <strong>Marble is today. Genie 3 is tomorrow.</strong></p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>DeepMind Genie 3 — a world model that generates real-time playable interactive environments.</p><p class="qr-tr"><span class="qr-flag">TR</span>DeepMind Genie 3 — gerçek zamanlı oynanabilir interaktif ortamlar üreten dünya modeli.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Prototyping playable game spaces and remixing scenes from a text prompt or reference image.</p><p class="qr-tr"><span class="qr-flag">TR</span>Oynanabilir oyun alanlarını prototiplemek; metin veya görselden sahne remix.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>No free tier — Google AI Ultra $249.99/mo, US-only, 18+; rolling out via Project Genie.</p><p class="qr-tr"><span class="qr-flag">TR</span>Ücretsiz plan yok — Google AI Ultra $249.99/ay, sadece ABD, 18+; Project Genie ile dağıtılıyor.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">deepmind.google/genie</span>
         <span class="tag">Real-time</span>
@@ -709,12 +757,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <h2><span class="red">Mirage</span> · Decart</h2>
   <div class="tool-grid">
     <div>
-      <p><span class="lang-tag">EN</span> Real-time video-to-video world transformation, <strong>20 fps</strong>. Stream a webcam in, get a different world out — rooms, lighting, weather changed. Decart's Magica engine is the next iteration: AI-native UGC engine where you modify the world in natural language while you play it.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Gerçek zamanlı video-video dünya dönüşümü, 20 fps. Oynarken doğal dilde dünyayı değiştir.</p>
-      <div class="card-red" style="margin-top:14px">
+      <div class="card-red" style="margin-top:12px;padding:14px 16px">
         <h3 class="red">The "live world" demo for the room</h3>
         <p>If we have stage time and the Wi-Fi cooperates, this is the demo I'd run live. <strong>Mirage is the only AI tool where the audience watches the world change in real time as I type.</strong> Compute as result.</p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Decart Mirage — zero-latency video-to-video model that restyles a live stream in real time.</p><p class="qr-tr"><span class="qr-flag">TR</span>Decart Mirage — canlı yayını gerçek zamanlı yeniden stilleyen sıfır gecikmeli video-to-video modeli.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Live-restyle gameplay capture, alt visual themes for streams, on-the-fly cutscene looks.</p><p class="qr-tr"><span class="qr-flag">TR</span>Oynanış yayınını canlı stillemek; alternatif görseller; anlık ara sahne görünümleri.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free API trial credits for developers; usage-based after that, no public monthly quota.</p><p class="qr-tr"><span class="qr-flag">TR</span>Geliştiriciler için ücretsiz API deneme kredisi; sonrası kullanım bazlı, aylık kota yok.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">mirage.decart.ai</span>
         <span class="tag">Video2video</span>
@@ -733,12 +785,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <div class="tool-grid">
     <div class="tool-shot" data-host="suno.com"><img src="img/suno.jpg" alt="Suno"></div>
     <div>
-      <p><span class="lang-tag">EN</span> Original soundtracks <strong>in minutes, not weeks</strong>. Vocal or instrumental, any genre, any tempo, any language. The output is good enough that I stopped buying stock music — and good enough to release as actual songs with credits.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Dakikalar içinde orijinal müzik. Vokal veya enstrümantal. Stock müzik almayı bıraktım.</p>
-      <div class="card-yellow" style="margin-top:14px">
+      <div class="card-yellow" style="margin-top:12px;padding:14px 16px">
         <h3>4 OST tracks for Marina v Ogne</h3>
         <p><strong>Marina</strong> ships with 4 original Suno tracks — EN, TR, ambient, finale. The TR cover plays when the player switches the game language. <strong class="red">Cost of recording 4 tracks: roughly the price of a coffee.</strong></p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Text-to-music generator — produces full songs with vocals, lyrics and instrumentation.</p><p class="qr-tr"><span class="qr-flag">TR</span>Metinden müzik üretir — vokal, sözler ve enstrümanlarla tam şarkı çıkarır.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Game soundtracks, menu themes, trailer music and placeholder vocals for prototypes.</p><p class="qr-tr"><span class="qr-flag">TR</span>Oyun müzikleri, menü teması, fragman müziği ve prototip için yer-tutucu vokal.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free: 50 credits/day (~10 songs), no commercial use, no downloads since Nov 2025; Pro $10/mo.</p><p class="qr-tr"><span class="qr-flag">TR</span>Ücretsiz: 50 kredi/gün (~10 şarkı), ticari yok, Kas 2025'ten beri indirme yok; Pro $10/ay.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">suno.com</span>
         <span class="tag">Vocal · instrumental</span>
@@ -755,12 +811,16 @@ p,li{font-size:clamp(14px,1.2vw,18px);line-height:1.6;color:#333}
   <h2><span class="red">Pollinations</span> · FLUX</h2>
   <div class="tool-grid">
     <div>
-      <p><span class="lang-tag">EN</span> Free, no-account, <strong>URL-based image API</strong> around FLUX. Drop a prompt into a URL, get back a JPG. No keys, no quotas in practice. Made for fast event cards, OG images, mood pieces — not high-fidelity hero art.</p>
-      <p class="tr"><span class="lang-tag">TR</span> Ücretsiz, hesapsız, URL tabanlı FLUX API. URL'ye prompt yaz, JPG al.</p>
-      <div class="card-red" style="margin-top:14px">
+      <div class="card-red" style="margin-top:12px;padding:14px 16px">
         <h3 class="red">11 event cards · OG images for Kloaka &amp; Marina</h3>
         <p>Every event in <strong>Marina</strong> has a Pollinations photo. The OG image of <strong>Kloaka Pechali</strong> on social previews is a single Pollinations call. <strong>"Good enough" fast path.</strong></p>
       </div>
+      <div class="quick-ref">
+        <div class="qr-row"><span class="qr-label">What<br><span class="qr-tag-tr">Nedir</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Free URL-based image API powered by FLUX — no signup, just hit a URL with a prompt.</p><p class="qr-tr"><span class="qr-flag">TR</span>FLUX tabanlı ücretsiz URL API'si — kayıt yok, prompt'lu URL'ye istek atınca görsel döner.</p></div></div>
+        <div class="qr-row"><span class="qr-label">For<br><span class="qr-tag-tr">Ne için</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Concept art, mood boards, UI mockups, sprite ideas, instant placeholder textures.</p><p class="qr-tr"><span class="qr-flag">TR</span>Konsept art, mood board, UI mockup, sprite fikri ve anlık yer-tutucu dokular.</p></div></div>
+        <div class="qr-row"><span class="qr-label">Free<br><span class="qr-tag-tr">Ücretsiz</span></span><div class="qr-text"><p class="qr-en"><span class="qr-flag">EN</span>Fully free and unlimited, no API key, no watermark — community-supported, best-effort uptime.</p><p class="qr-tr"><span class="qr-flag">TR</span>Tamamen ücretsiz ve sınırsız, API anahtarı yok, watermark yok — topluluk destekli, garanti yok.</p></div></div>
+      </div>
+
       <div class="tool-meta">
         <span class="tag tag-red">pollinations.ai</span>
         <span class="tag">URL API</span>
