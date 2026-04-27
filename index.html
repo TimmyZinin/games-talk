@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Yapay Zekâ ile Oyun Yaratmak — Tim Zinin</title>
+<meta name="description" content="Creating Games with AI — Tim Zinin talk, Antalya 2026" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#faf5ec;
+    --cream-2:#f3ebd9;
+    --ink:#15110d;
+    --ink-2:#3a2f25;
+    --bordeaux:#8b1538;
+    --bordeaux-2:#6e0f2a;
+    --red:#d32536;
+    --line:#2a201a;
+    --muted:#6f6358;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--cream);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{overflow:hidden}
+
+  /* grain overlay */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.06;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  .deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{
+    position:absolute;inset:0;
+    padding: clamp(28px, 5vw, 72px);
+    display:flex;flex-direction:column;justify-content:space-between;
+    opacity:0;transform:translateY(8px);pointer-events:none;
+    transition:opacity .35s ease,transform .35s ease;
+    background:var(--cream);
+  }
+  .slide.is-active{opacity:1;transform:none;pointer-events:auto}
+
+  /* HUD */
+  .hud{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 22px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;
+    color:var(--ink-2);
+    background:linear-gradient(0deg,rgba(250,245,236,.95),rgba(250,245,236,0));
+  }
+  .hud .who{display:flex;gap:14px;align-items:center}
+  .hud .dot{width:8px;height:8px;border-radius:50%;background:var(--bordeaux)}
+  .hud .nums{font-variant-numeric:tabular-nums}
+  .hud .nav{display:flex;gap:6px}
+  .hud button{font:inherit;background:transparent;border:1px solid var(--line);color:var(--ink);padding:4px 10px;border-radius:999px;cursor:pointer}
+  .hud button:hover{background:var(--ink);color:var(--cream)}
+
+  /* progress bar */
+  .progress{position:fixed;top:0;left:0;height:3px;background:var(--bordeaux);z-index:60;transition:width .35s ease}
+
+  /* slide internals */
+  .row{display:flex;gap:clamp(16px,3vw,48px);width:100%}
+  .col{flex:1;min-width:0}
+
+  .label{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--bordeaux);display:flex;gap:10px;align-items:center;margin-bottom:18px;
+  }
+  .label::before{content:"";width:30px;height:1px;background:var(--bordeaux)}
+
+  h1.title{
+    font-family:'Fraunces',serif;font-weight:900;
+    font-size:clamp(44px,7.6vw,128px);line-height:.95;letter-spacing:-.025em;
+    color:var(--ink);
+  }
+  h1.title em{font-style:italic;color:var(--bordeaux);font-weight:900}
+  h2{
+    font-family:'Fraunces',serif;font-weight:800;
+    font-size:clamp(32px,4.6vw,64px);line-height:1;letter-spacing:-.02em;
+  }
+  h3{
+    font-family:'Fraunces',serif;font-weight:700;
+    font-size:clamp(22px,2.4vw,32px);line-height:1.1;letter-spacing:-.01em;
+  }
+  .lead{font-size:clamp(18px,1.6vw,22px);line-height:1.45;color:var(--ink-2);max-width:60ch}
+  .body{font-size:clamp(15px,1.15vw,17px);line-height:1.55;color:var(--ink-2)}
+  .body p+p{margin-top:.7em}
+
+  .bilang{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,48px);align-items:start}
+  .bilang .pane{padding:0}
+  .bilang .pane.tr{border-left:1px solid rgba(21,17,13,.12);padding-left:clamp(20px,2.5vw,40px)}
+  .lang-tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--bordeaux);margin-bottom:10px;display:inline-block;
+  }
+
+  ul.points{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  ul.points li{
+    position:relative;padding-left:22px;font-size:clamp(15px,1.2vw,18px);line-height:1.45;color:var(--ink);
+  }
+  ul.points li::before{
+    content:"";position:absolute;left:0;top:.7em;width:10px;height:2px;background:var(--bordeaux);
+  }
+
+  .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ink);padding:4px 10px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--ink)}
+  .tag.red{background:var(--bordeaux);color:var(--cream);border-color:var(--bordeaux)}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+
+  /* card grid */
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.4vw,22px)}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.2vw,18px)}
+  .card{
+    background:var(--cream-2);border:1px solid rgba(21,17,13,.12);border-radius:18px;
+    padding:clamp(14px,1.4vw,22px);display:flex;flex-direction:column;gap:10px;min-height:0;
+  }
+  .card .name{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(20px,1.6vw,24px);line-height:1.05;letter-spacing:-.01em}
+  .card .desc{font-size:13px;line-height:1.4;color:var(--ink-2)}
+  .card .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em}
+  .card.hero{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+  .card.hero .desc{color:rgba(250,245,236,.78)}
+  .card.hero .meta{color:rgba(250,245,236,.6)}
+  .card.bordo{background:var(--bordeaux);color:var(--cream);border-color:var(--bordeaux)}
+  .card.bordo .desc{color:rgba(250,245,236,.85)}
+  .card.bordo .meta{color:rgba(250,245,236,.7)}
+
+  /* big numbers */
+  .stat{display:flex;flex-direction:column;gap:2px}
+  .stat .n{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(40px,5vw,72px);line-height:.9;color:var(--bordeaux)}
+  .stat .k{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+
+  /* arrow flow */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:18px}
+  .flow .step{
+    border:1px solid var(--ink);padding:10px 16px;border-radius:999px;font-family:'JetBrains Mono',monospace;
+    font-size:13px;background:var(--cream);
+  }
+  .flow .arr{color:var(--bordeaux);font-size:18px}
+  .flow .step.solid{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+
+  /* hero number layout */
+  .hero-stack{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+
+  /* footer note on slide */
+  .foot{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--muted);
+    display:flex;gap:14px;align-items:center;
+  }
+  .foot a{color:var(--bordeaux);text-decoration:none;border-bottom:1px solid transparent}
+  .foot a:hover{border-color:var(--bordeaux)}
+
+  /* slide-specific */
+  .slide-title .title-block{margin-top:auto}
+  .slide-title .meta-block{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-top:24px}
+  .slide-title h1.title{margin-bottom:18px}
+
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    border:1px solid var(--ink);padding:6px 12px;border-radius:999px;color:var(--ink);
+  }
+  .badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--bordeaux);box-shadow:0 0 0 0 rgba(139,21,56,.5);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(139,21,56,.5)}70%{box-shadow:0 0 0 12px rgba(139,21,56,0)}100%{box-shadow:0 0 0 0 rgba(139,21,56,0)}}
+
+  /* timeline split */
+  .split{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
+
+  /* live demo full */
+  .slide-demo{background:var(--ink);color:var(--cream)}
+  .slide-demo .label{color:var(--cream)}
+  .slide-demo .label::before{background:var(--cream)}
+  .slide-demo h1.title{color:var(--cream)}
+  .slide-demo h1.title em{color:#ffb3a7}
+  .slide-demo .body{color:rgba(250,245,236,.78)}
+  .slide-demo .lead{color:rgba(250,245,236,.85)}
+  .slide-demo .bilang .pane.tr{border-left-color:rgba(250,245,236,.18)}
+
+  /* helpers */
+  .stretch{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .topbar{display:flex;justify-content:space-between;align-items:center;width:100%}
+  .num{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.18em;color:var(--ink-2)}
+
+  /* responsive */
+  @media (max-width:880px){
+    .bilang{grid-template-columns:1fr}
+    .bilang .pane.tr{border-left:none;border-top:1px solid rgba(21,17,13,.12);padding-left:0;padding-top:18px}
+    .grid-3{grid-template-columns:1fr 1fr}
+    .grid-4{grid-template-columns:1fr 1fr}
+    .split{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 — TITLE -->
+  <section class="slide slide-title is-active">
+    <div class="topbar">
+      <span class="badge"><span class="pulse"></span>Antalya · 2026</span>
+      <span class="num">01 / 12</span>
+    </div>
+    <div class="title-block">
+      <div class="label">Tim Zinin · Talk</div>
+      <h1 class="title">Yapay Zekâ ile<br><em>Oyun Yaratmak</em>.</h1>
+      <div class="meta-block">
+        <p class="lead">Creating Games with AI — bir pazarlamacının bir akşamda dört oyun yapışı, ve siz de yapabilirsiniz.</p>
+        <span class="num">25 min talk · 30 min live build</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 — WHO -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">01 · Who</div>
+      <span class="num">02 / 12</span>
+    </div>
+    <div class="stretch">
+      <div class="bilang">
+        <div class="pane">
+          <span class="lang-tag">EN</span>
+          <h2>I teach entrepreneurs<br>to build with AI.</h2>
+          <p class="body" style="margin-top:18px">Marketer by trade. Today I help founders, agencies and creators turn AI from a toy into a tool that ships products, content and games.</p>
+          <ul class="points" style="margin-top:18px">
+            <li>15+ years in marketing &amp; product</li>
+            <li>Daily user of Claude, Codex, Cursor, Unity, Three.js</li>
+            <li>Public output: <a style="color:var(--bordeaux)" href="https://timzinin.com">timzinin.com</a></li>
+          </ul>
+        </div>
+        <div class="pane tr">
+          <span class="lang-tag">TR</span>
+          <h2>Girişimcilere yapay zekâ<br>ile üretmeyi öğretiyorum.</h2>
+          <p class="body" style="margin-top:18px">Mesleğim pazarlama. Kurucularla, ajanslarla ve içerik üreticileriyle çalışıyorum — yapay zekâyı oyuncak olmaktan çıkarıp ürün, içerik ve oyun üreten bir araca dönüştürüyoruz.</p>
+          <ul class="points" style="margin-top:18px">
+            <li>Pazarlama ve ürün alanında 15+ yıl</li>
+            <li>Her gün: Claude, Codex, Cursor, Unity, Three.js</li>
+            <li>Açık portföy: <a style="color:var(--bordeaux)" href="https://timzinin.com">timzinin.com</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Tim Zinin</span><span>·</span><span>AI Training Specialist</span></div>
+  </section>
+
+  <!-- 3 — TODAY'S PLAN -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">02 · Plan</div>
+      <span class="num">03 / 12</span>
+    </div>
+    <div class="stretch">
+      <div class="bilang">
+        <div class="pane">
+          <span class="lang-tag">EN</span>
+          <h2>Two halves.<br><span style="color:var(--bordeaux)">Talk, then build.</span></h2>
+          <ul class="points" style="margin-top:24px">
+            <li><b>00–25 min</b> — How games are actually made with AI in 2026</li>
+            <li><b>25–55 min</b> — We build a small game live, on stage, together</li>
+            <li>You pick the genre. I will be typing prompts, not code</li>
+          </ul>
+        </div>
+        <div class="pane tr">
+          <span class="lang-tag">TR</span>
+          <h2>İki bölüm.<br><span style="color:var(--bordeaux)">Önce konuşma, sonra üretim.</span></h2>
+          <ul class="points" style="margin-top:24px">
+            <li><b>00–25 dk</b> — 2026'da yapay zekâ ile oyun nasıl yapılır</li>
+            <li><b>25–55 dk</b> — Sahnede, birlikte küçük bir oyun yapıyoruz</li>
+            <li>Türü siz seçiyorsunuz. Ben kod değil, prompt yazacağım</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Format</span><span>·</span><span>25 + 30 minutes</span></div>
+  </section>
+
+  <!-- 4 — WHAT WE BUILT -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">03 · Track Record</div>
+      <span class="num">04 / 12</span>
+    </div>
+    <div class="bilang" style="margin-top:8px">
+      <div class="pane">
+        <span class="lang-tag">EN</span>
+        <h2>4 games shipped.<br>One month. Solo.</h2>
+        <p class="body" style="margin-top:14px">From browser narrative sims to Unity WebGL shooters. Each one shipped to a public URL with analytics. No team, no engine licenses, no months of pre-production.</p>
+      </div>
+      <div class="pane tr">
+        <span class="lang-tag">TR</span>
+        <h2>4 oyun yayında.<br>Bir ay. Tek başına.</h2>
+        <p class="body" style="margin-top:14px">Tarayıcıda anlatı simülasyonundan Unity WebGL nişancıya kadar. Hepsi canlı URL ve analitiklerle. Ekip yok, motor lisansı yok, aylarca süren ön üretim yok.</p>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:32px">
+      <div class="card hero">
+        <span class="meta">CASE 01 · Browser sim</span>
+        <span class="name">Marina v Ogne</span>
+        <span class="desc">30-day founder life sim. JS + Suno + GPT-image. 86% landing→play.</span>
+      </div>
+      <div class="card bordo">
+        <span class="meta">CASE 02 · Unity WebGL</span>
+        <span class="name">Kloaka Pechali</span>
+        <span class="desc">4-level shooter, lead magnet for sborka.work. Tripo 3D models.</span>
+      </div>
+      <div class="card">
+        <span class="meta">CASE 03 · Three.js</span>
+        <span class="name">Afterhumans</span>
+        <span class="desc">Narrative walker. Kafka the corgi. Grey-box prototype.</span>
+      </div>
+      <div class="card">
+        <span class="meta">CASE 04 · Lab work</span>
+        <span class="name">Walker prototypes</span>
+        <span class="desc">Unity Starter Assets &amp; FPS controller experiments.</span>
+      </div>
+    </div>
+    <div class="foot"><span>April 2026</span><span>·</span><span>4 / 4 deployed publicly</span></div>
+  </section>
+
+  <!-- 5 — MARINA -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">Case 01 · Marina v Ogne</div>
+      <span class="num">05 / 12</span>
+    </div>
+    <div class="split" style="margin-top:6px">
+      <div>
+        <div class="bilang">
+          <div class="pane">
+            <span class="lang-tag">EN</span>
+            <h2>A founder<br>burnout sim.</h2>
+            <p class="body" style="margin-top:14px">A 30-day text-based life simulator. Marina runs a tiny content studio. The player manages hours, energy, food, comfort and 22 contacts in a Telegram-style messenger — until Tim shows up with AI and rewrites the rules.</p>
+          </div>
+          <div class="pane tr">
+            <span class="lang-tag">TR</span>
+            <h2>Bir kurucunun<br>tükenmişlik simülasyonu.</h2>
+            <p class="body" style="margin-top:14px">30 günlük metin tabanlı yaşam simülatörü. Marina küçük bir içerik stüdyosu işletiyor. Oyuncu saatleri, enerjiyi, yiyeceği, konforu ve Telegram tarzı mesajlaşmadaki 22 kişiyi yönetiyor — ta ki Tim yapay zekâyla gelip kuralları yeniden yazana kadar.</p>
+          </div>
+        </div>
+        <div class="tags" style="margin-top:22px">
+          <span class="tag red">Vanilla JS</span>
+          <span class="tag">Claude · architecture</span>
+          <span class="tag">Suno · 4 OST tracks</span>
+          <span class="tag">GPT-image · 10 heroes</span>
+          <span class="tag">Pollinations · 11 events</span>
+          <span class="tag">Umami · 710 events tracked</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="hero-stack">
+          <div class="stat"><span class="n">86%</span><span class="k">landing → play</span></div>
+          <div class="stat"><span class="n">22</span><span class="k">live contacts</span></div>
+        </div>
+        <div class="hero-stack">
+          <div class="stat"><span class="n">4</span><span class="k">locales · EN/RU/TR/PT</span></div>
+          <div class="stat"><span class="n">v2.10</span><span class="k">shipped</span></div>
+        </div>
+        <div class="card hero">
+          <span class="meta">Live</span>
+          <span class="name">timzinin.com/marina-next</span>
+          <span class="desc">Inherits A Dark Room's pacing. Claude wrote the state machine, the funnel, the win/lose, and the 4th-wall finale.</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>2 wins recorded</span><span>·</span><span>56 sessions in first 5 days</span></div>
+  </section>
+
+  <!-- 6 — KLOAKA -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">Case 02 · Kloaka Pechali</div>
+      <span class="num">06 / 12</span>
+    </div>
+    <div class="split" style="margin-top:6px">
+      <div>
+        <div class="bilang">
+          <div class="pane">
+            <span class="lang-tag">EN</span>
+            <h2>A WebGL<br>shooter — solo.</h2>
+            <p class="body" style="margin-top:14px">A four-level Unity WebGL shooter shaped like the modern job hunt: HH.ru flea market → LinkedIn → HR swamp → final boss interviewer. A lead magnet for sborka.work that ships as a 26 MB browser game.</p>
+          </div>
+          <div class="pane tr">
+            <span class="lang-tag">TR</span>
+            <h2>Tek başıma<br>WebGL nişancı.</h2>
+            <p class="body" style="margin-top:14px">Modern iş arama sürecinin biçimini almış dört bölümlü Unity WebGL nişancı: HH.ru pazarı → LinkedIn → İK bataklığı → final patron mülakatçı. sborka.work için bir lead magnet, tarayıcıda 26 MB.</p>
+          </div>
+        </div>
+        <div class="tags" style="margin-top:22px">
+          <span class="tag red">Unity 6 WebGL</span>
+          <span class="tag">Tripo · 11 enemy meshes</span>
+          <span class="tag">Claude · gameplay code</span>
+          <span class="tag">Pollinations · OG image</span>
+          <span class="tag">Docker build on VPS</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div class="hero-stack">
+          <div class="stat"><span class="n">4</span><span class="k">levels</span></div>
+          <div class="stat"><span class="n">11</span><span class="k">AI-made meshes</span></div>
+        </div>
+        <div class="hero-stack">
+          <div class="stat"><span class="n">26 MB</span><span class="k">brotli build</span></div>
+          <div class="stat"><span class="n">10</span><span class="k">tracked events</span></div>
+        </div>
+        <div class="card bordo">
+          <span class="meta">Live</span>
+          <span class="name">timzinin.com/kloaka-pechali</span>
+          <span class="desc">Tripo3D turned text prompts into game-ready GLBs. Claude wrote enemies, weapons, upgrades and the HTML overlay CTA.</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Unity 6000.0.72f1</span><span>·</span><span>Built &amp; shipped from a laptop</span></div>
+  </section>
+
+  <!-- 7 — AFTERHUMANS -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">Case 03 · Afterhumans</div>
+      <span class="num">07 / 12</span>
+    </div>
+    <div class="split" style="margin-top:6px">
+      <div>
+        <div class="bilang">
+          <div class="pane">
+            <span class="lang-tag">EN</span>
+            <h2>A corgi named<br>Kafka, alone.</h2>
+            <p class="body" style="margin-top:14px">A Three.js narrative walker. Episode 0: a small dog wakes up in a grey room and walks toward something. Originally a Unity project — pivoted to web, reusing the same kafka_corgi.glb. Now a grey-box that's honest about what works.</p>
+          </div>
+          <div class="pane tr">
+            <span class="lang-tag">TR</span>
+            <h2>Kafka adında<br>bir corgi, yalnız.</h2>
+            <p class="body" style="margin-top:14px">Three.js anlatı yürüyüşü. Bölüm 0: küçük bir köpek gri bir odada uyanıyor ve bir şeye doğru yürüyor. Önce Unity projesiydi — webe geçti, aynı kafka_corgi.glb modeli kullanıldı. Şu an dürüst bir grey-box prototipi.</p>
+          </div>
+        </div>
+        <div class="tags" style="margin-top:22px">
+          <span class="tag red">Three.js</span>
+          <span class="tag">Reused GLB asset</span>
+          <span class="tag">DOM overlay narrative</span>
+          <span class="tag">Pivot lesson · be honest</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <span class="meta">Lesson</span>
+          <span class="name">Independent review beats self-grading.</span>
+          <span class="desc">Sprints rated 9.2–9.4 by the builder turned out to be 7.8 under Codex review. Missing assets, drifted README. We pivoted instead of polishing a story.</span>
+        </div>
+        <div class="card hero">
+          <span class="meta">Stack reuse</span>
+          <span class="name">From Unity to Three.js</span>
+          <span class="desc">Same character, same world, different runtime. AI-made GLBs port across engines for free.</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Status: Paused after audit</span><span>·</span><span>Three.js grey-box next</span></div>
+  </section>
+
+  <!-- 8 — TOOL STACK -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">04 · Stack</div>
+      <span class="num">08 / 12</span>
+    </div>
+    <div class="bilang" style="margin-top:6px">
+      <div class="pane">
+        <span class="lang-tag">EN</span>
+        <h2>The 2026 stack<br>fits in one slide.</h2>
+      </div>
+      <div class="pane tr">
+        <span class="lang-tag">TR</span>
+        <h2>2026 yığını<br>tek bir slayda sığar.</h2>
+      </div>
+    </div>
+    <div class="grid-4" style="margin-top:24px">
+      <div class="card hero">
+        <span class="meta">CODE</span>
+        <span class="name">Claude Code</span>
+        <span class="desc">Terminal agent. Big context. Refactors. Scripts. Shaders.</span>
+      </div>
+      <div class="card">
+        <span class="meta">CODE</span>
+        <span class="name">Cursor</span>
+        <span class="desc">IDE agent for daily editing. Tabs &amp; multi-file edits.</span>
+      </div>
+      <div class="card">
+        <span class="meta">REVIEW</span>
+        <span class="name">Codex CLI</span>
+        <span class="desc">Independent reviewer in read-only sandbox. Catches lies.</span>
+      </div>
+      <div class="card bordo">
+        <span class="meta">3D MESH</span>
+        <span class="name">Tripo · Meshy · Rodin</span>
+        <span class="desc">Text/image → GLB. Quad topology. Drop into Unity.</span>
+      </div>
+      <div class="card">
+        <span class="meta">3D WORLD</span>
+        <span class="name">Marble (World Labs)</span>
+        <span class="desc">Photo / prompt → walkable 3D world. Splats + mesh export.</span>
+      </div>
+      <div class="card">
+        <span class="meta">3D WORLD</span>
+        <span class="name">Genie 3 · Mirage</span>
+        <span class="desc">Real-time playable worlds streamed from a prompt.</span>
+      </div>
+      <div class="card">
+        <span class="meta">AUDIO</span>
+        <span class="name">Suno</span>
+        <span class="desc">Original OST in minutes. Replaces stock music libraries.</span>
+      </div>
+      <div class="card">
+        <span class="meta">IMAGE</span>
+        <span class="name">GPT-image · FLUX</span>
+        <span class="desc">Hero art, OG images, event photos, end cards.</span>
+      </div>
+    </div>
+    <div class="foot"><span>One person · Five tools · A small game in a day</span></div>
+  </section>
+
+  <!-- 9 — GDD -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">05 · GDD</div>
+      <span class="num">09 / 12</span>
+    </div>
+    <div class="split" style="margin-top:6px">
+      <div>
+        <div class="bilang">
+          <div class="pane">
+            <span class="lang-tag">EN</span>
+            <h2>Game Design Doc.<br>Six sections, max.</h2>
+            <p class="body" style="margin-top:14px">A GDD is not a 200-page bible. In 2026 it's a living markdown file you write <em>with</em> Claude. Done well, it makes every later prompt 10× sharper.</p>
+          </div>
+          <div class="pane tr">
+            <span class="lang-tag">TR</span>
+            <h2>Oyun Tasarım Belgesi.<br>En fazla altı bölüm.</h2>
+            <p class="body" style="margin-top:14px">GDD 200 sayfalık kutsal kitap değildir. 2026'da Claude ile birlikte yazdığınız canlı bir markdown dosyasıdır. İyi yazılırsa sonraki tüm prompt'lar 10 kat keskin olur.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ul class="points">
+          <li><b>1 · Pitch</b> — name, genre, platform, core loop in one sentence</li>
+          <li><b>2 · Mechanics</b> — actions, controls, progression, fail/win</li>
+          <li><b>3 · Art</b> — style, references, mood board, palette</li>
+          <li><b>4 · Narrative</b> — world, characters, tone, pacing</li>
+          <li><b>5 · UI &amp; Audio</b> — wireframes, music brief, SFX list</li>
+          <li><b>6 · Scope</b> — MVP, monetization, ship date, what's <em>out</em></li>
+        </ul>
+        <p class="body" style="margin-top:18px;color:var(--bordeaux)"><b>Pro tip ·</b> Ask Claude: <i>"Push back on this GDD. Where will I get stuck in week two?"</i></p>
+      </div>
+    </div>
+    <div class="foot"><span>Live document</span><span>·</span><span>Edit it as the game changes</span></div>
+  </section>
+
+  <!-- 10 — WORKFLOW -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">06 · Workflow</div>
+      <span class="num">10 / 12</span>
+    </div>
+    <div class="bilang" style="margin-top:6px">
+      <div class="pane">
+        <span class="lang-tag">EN</span>
+        <h2>Idea on Monday.<br>Live game on Friday.</h2>
+        <p class="body" style="margin-top:14px">Five steps. Each step is a prompt and a check. Codex reviews what Claude builds. The web is the platform. Hosting is GitHub Pages, free.</p>
+      </div>
+      <div class="pane tr">
+        <span class="lang-tag">TR</span>
+        <h2>Pazartesi fikir.<br>Cuma yayında oyun.</h2>
+        <p class="body" style="margin-top:14px">Beş adım. Her adımda bir prompt ve bir kontrol. Codex, Claude'un yazdığını gözden geçirir. Platform web. Barındırma ücretsiz: GitHub Pages.</p>
+      </div>
+    </div>
+    <div class="flow" style="margin-top:36px">
+      <span class="step solid">Idea</span><span class="arr">→</span>
+      <span class="step">GDD with Claude</span><span class="arr">→</span>
+      <span class="step">Plan with Codex</span><span class="arr">→</span>
+      <span class="step">Build with Claude Code</span><span class="arr">→</span>
+      <span class="step">Assets · Tripo · Suno · FLUX</span><span class="arr">→</span>
+      <span class="step solid">Ship to Web</span>
+    </div>
+    <p class="body" style="margin-top:24px;max-width:80ch">Same loop scales from a 200-line web toy to a 4-level Unity build. The bottleneck is taste &amp; decisions, not typing speed.</p>
+    <div class="foot"><span>Loop</span><span>·</span><span>Idea → GDD → Plan → Build → Assets → Ship</span></div>
+  </section>
+
+  <!-- 11 — FUTURE / WORLDS -->
+  <section class="slide">
+    <div class="topbar">
+      <div class="label">07 · What's Next</div>
+      <span class="num">11 / 12</span>
+    </div>
+    <div class="bilang" style="margin-top:6px">
+      <div class="pane">
+        <span class="lang-tag">EN</span>
+        <h2>Worlds, generated.<br>Not modeled.</h2>
+        <p class="body" style="margin-top:14px">The next jump is whole worlds from a sentence or a photo. You will not place trees by hand. You will describe a place, walk through three versions, and pick one.</p>
+      </div>
+      <div class="pane tr">
+        <span class="lang-tag">TR</span>
+        <h2>Üretilmiş dünyalar.<br>Modellenmiş değil.</h2>
+        <p class="body" style="margin-top:14px">Sonraki sıçrama: tek cümleden ya da fotoğraftan tüm bir dünya. Ağaçları elle yerleştirmeyeceksiniz. Bir yeri tarif edip üç versiyonu içinde gezeceksiniz, birini seçeceksiniz.</p>
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:28px">
+      <div class="card hero">
+        <span class="meta">WORLD LABS · Nov 2025</span>
+        <span class="name">Marble</span>
+        <span class="desc">Photo or prompt → 3D world. Gaussian splats &amp; mesh export. Editable, downloadable, embeddable.</span>
+      </div>
+      <div class="card bordo">
+        <span class="meta">GOOGLE DEEPMIND · 2026</span>
+        <span class="name">Genie 3</span>
+        <span class="desc">Real-time playable worlds. 720p · 24fps · ~60s to generate. Walk through a sentence.</span>
+      </div>
+      <div class="card">
+        <span class="meta">DECART</span>
+        <span class="name">Mirage</span>
+        <span class="desc">Real-time video-to-video world transformation. Modify a world while you play it.</span>
+      </div>
+    </div>
+    <p class="body" style="margin-top:22px;max-width:80ch"><b style="color:var(--bordeaux)">For us, today:</b> Marble already exports walkable scenes you can drop into Three.js or Unity. The future is partly here — the cheap part.</p>
+    <div class="foot"><span>marble.worldlabs.ai</span><span>·</span><span>deepmind.google/genie</span><span>·</span><span>mirage.decart.ai</span></div>
+  </section>
+
+  <!-- 12 — LIVE / CTA -->
+  <section class="slide slide-demo">
+    <div class="topbar">
+      <div class="label">08 · Your Turn</div>
+      <span class="num">12 / 12</span>
+    </div>
+    <div class="stretch">
+      <div class="bilang">
+        <div class="pane">
+          <span class="lang-tag">EN</span>
+          <h1 class="title">Pick a genre.<br><em>We build it now.</em></h1>
+          <p class="lead" style="margin-top:18px">Shooter · narrative · sim · arcade · puzzle. The room votes, I open Claude Code, you watch the prompts and the screen at the same time.</p>
+        </div>
+        <div class="pane tr">
+          <span class="lang-tag">TR</span>
+          <h1 class="title" style="font-size:clamp(36px,5.6vw,84px)">Bir tür seçin.<br><em>Şimdi yapıyoruz.</em></h1>
+          <p class="lead" style="margin-top:18px">Nişancı · anlatı · simülasyon · arcade · bulmaca. Salon oylar, Claude Code'u açarım, ekrana ve prompt'lara aynı anda bakarsınız.</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stack" style="margin-top:24px">
+      <div class="badge" style="border-color:var(--cream);color:var(--cream)"><span class="pulse"></span>Live build · 30 min</div>
+      <div class="foot" style="color:rgba(250,245,236,.7)">
+        <span>tim · zinin</span><span>·</span><span>timzinin.com</span><span>·</span><span>Antalya 2026</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="hud">
+  <div class="who"><span class="dot"></span><span>Tim Zinin · Creating Games with AI</span></div>
+  <div class="nav">
+    <button id="prev" aria-label="Previous">←</button>
+    <span class="nums" id="counter">01 / 12</span>
+    <button id="next" aria-label="Next">→</button>
+  </div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let i = 0;
+  const total = slides.length;
+
+  function go(n){
+    i = Math.max(0, Math.min(total-1, n));
+    slides.forEach((s,idx)=>s.classList.toggle('is-active', idx===i));
+    counter.textContent = String(i+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+    progress.style.width = ((i+1)/total*100) + '%';
+    history.replaceState(null,'','#'+(i+1));
+  }
+  document.getElementById('prev').addEventListener('click',()=>go(i-1));
+  document.getElementById('next').addEventListener('click',()=>go(i+1));
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ') {e.preventDefault();go(i+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp') {e.preventDefault();go(i-1)}
+    if(e.key==='Home') go(0);
+    if(e.key==='End') go(total-1);
+  });
+  document.addEventListener('click',(e)=>{
+    if(e.target.closest('.hud')||e.target.closest('a')) return;
+    const x = e.clientX, w = window.innerWidth;
+    if (x > w*0.65) go(i+1);
+    else if (x < w*0.35) go(i-1);
+  });
+
+  // hash deep link
+  const fromHash = parseInt((location.hash||'').replace('#',''),10);
+  if (!isNaN(fromHash) && fromHash>=1 && fromHash<=total) go(fromHash-1); else go(0);
+</script>
+
+</body>
+</html>
