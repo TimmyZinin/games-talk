@@ -1,0 +1,171 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - generic: ТИМОФЕЙ ЗИНИН · АРТ-ПРОЕКТ
+    - generic: КЛОАКА ПЕЧАЛИ · ЭПИЗОД 01
+    - generic:
+      - link "МАНИФЕСТ" [ref=e2] [cursor=pointer]:
+        - /url: ./manifesto.html
+      - text: ·
+      - link "ИГРАТЬ" [ref=e3] [cursor=pointer]:
+        - /url: "#play"
+  - generic [ref=e4]:
+    - img "Силуэт человека на краю бездны, куда падает бесконечный поток резюме и оранжевых конвертов" [ref=e6]
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - text: АРТ-ИГРА ·
+          - strong [ref=e10]: ЭПИЗОД 01
+          - text: · 2026
+        - generic [ref=e11]: WEBGL · 10 МИНУТ · В БРАУЗЕРЕ
+      - generic [ref=e12]:
+        - heading "Клоака печали" [level=1] [ref=e13]:
+          - text: Клоака
+          - emphasis [ref=e14]: печали
+        - paragraph [ref=e15]: Шутер про то, как в России ищут работу. Четыре уровня, десять минут.
+        - link "Начать игру" [ref=e16] [cursor=pointer]:
+          - /url: ./game/
+          - generic [ref=e17]: Начать игру
+          - generic [ref=e18]: →
+        - generic [ref=e19]:
+          - generic [ref=e20]: ~10 МИНУТ
+          - generic [ref=e21]: ·БЕЗ РЕГИСТРАЦИИ
+          - generic [ref=e22]: ·БЕСПЛАТНО
+          - generic [ref=e23]: ·RU
+      - generic [ref=e24]: СКРОЛЛИТЬ
+  - generic [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e29]: ВКРАТЦЕ
+      - heading "Шутер про поиск работы." [level=2] [ref=e30]:
+        - text: Шутер про
+        - emphasis [ref=e31]: поиск работы
+        - text: .
+    - generic [ref=e32]:
+      - paragraph [ref=e33]: Пять лет HH, LinkedIn и собеседований — уложены в десять минут геймплея.
+      - paragraph [ref=e34]: Ты летишь сквозь ленту вакансий, отбиваешься от карьерных коучей, проходишь через HR-болото. В финале — собеседование, которое не заканчивается.
+      - paragraph [ref=e35]: Открывается в браузере. Бесплатно. По лицензии Creative Commons.
+  - generic [ref=e36]:
+    - generic [ref=e37]:
+      - generic [ref=e38]: ПЕРСОНАЖИ
+      - heading "Ты уже встречал каждого." [level=2] [ref=e39]:
+        - text: Ты уже
+        - emphasis [ref=e40]: встречал
+        - text: каждого.
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - img "Дрон-резюме" [ref=e44]
+        - generic [ref=e45]:
+          - generic [ref=e46]: № 01
+          - heading "Дрон-резюме" [level=3] [ref=e47]
+          - paragraph [ref=e48]: Свернутое в трубку резюме с зубами. Летает стаями.
+      - generic [ref=e49]:
+        - img "Конверт-спамер" [ref=e51]
+        - generic [ref=e52]:
+          - generic [ref=e53]: № 02
+          - heading "Конверт-спамер" [level=3] [ref=e54]
+          - paragraph [ref=e55]: Распухший оранжевый конверт. Плюётся вакансиями.
+      - generic [ref=e56]:
+        - img "Гуру в костюме" [ref=e58]
+        - generic [ref=e59]:
+          - generic [ref=e60]: № 03
+          - heading "Гуру в костюме" [level=3] [ref=e61]
+          - paragraph [ref=e62]: Улыбается шире, чем может лицо. Советует бесплатно.
+      - generic [ref=e63]:
+        - img "Рекрутёр-паук" [ref=e65]
+        - generic [ref=e66]:
+          - generic [ref=e67]: № 04
+          - heading "Рекрутёр-паук" [level=3] [ref=e68]
+          - paragraph [ref=e69]: Восемь ног, один клипборд. «Ваш профиль не подошёл.»
+      - generic [ref=e70]:
+        - img "HR-хамелеон" [ref=e72]
+        - generic [ref=e73]:
+          - generic [ref=e74]: № 05
+          - heading "HR-хамелеон" [level=3] [ref=e75]
+          - paragraph [ref=e76]: Маскируется под дружеский чат. Кусает неожиданно.
+      - generic [ref=e77]:
+        - img "Полый интервьюер" [ref=e79]
+        - generic [ref=e80]:
+          - generic [ref=e81]: БОСС
+          - heading "Полый интервьюер" [level=3] [ref=e82]
+          - paragraph [ref=e83]: Костюм без головы. Только красный глаз и каскад резюме.
+  - generic [ref=e84]:
+    - generic [ref=e85]:
+      - generic [ref=e86]: УРОВНИ
+      - heading "Четыре уровня." [level=2] [ref=e87]:
+        - text: Четыре
+        - emphasis [ref=e88]: уровня
+        - text: .
+    - generic [ref=e89]:
+      - article [ref=e90]:
+        - generic [ref=e91]: "01"
+        - generic [ref=e92]:
+          - heading "Оранжевая барахолка" [level=3] [ref=e93]
+          - paragraph [ref=e94]: Лента, которая никогда не заканчивается. Всё горит.
+        - generic [ref=e95]: "БОСС: ИНТЕРВЬЮЕР"
+      - article [ref=e96]:
+        - generic [ref=e97]: "02"
+        - generic [ref=e98]:
+          - heading "Галактика гуру" [level=3] [ref=e99]
+          - paragraph [ref=e100]: Синие костюмы. Хэштеги вместо лиц. «Booking a call is the new handshake».
+        - generic [ref=e101]: "БОСС: ПАНЕЛЬ"
+      - article [ref=e102]:
+        - generic [ref=e103]: "03"
+        - generic [ref=e104]:
+          - heading "HR-болото" [level=3] [ref=e105]
+          - paragraph [ref=e106]: «Мы изучим ваше резюме и вернёмся.» Никто никогда не возвращается.
+        - generic [ref=e107]: "БОСС: ПАНЕЛЬ"
+      - article [ref=e108]:
+        - generic [ref=e109]: "04"
+        - generic [ref=e110]:
+          - heading "Финальное собеседование" [level=3] [ref=e111]
+          - paragraph [ref=e112]: «А где вы видите себя через пять лет?» Рывок сквозь пустой костюм.
+        - generic [ref=e113]: "БОСС: ПОЛЫЙ CEO"
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - generic [ref=e117]: Длительность
+      - generic [ref=e118]: ~10 мин
+      - generic [ref=e119]: один заход, без сохранения
+    - generic [ref=e120]:
+      - generic [ref=e121]: Платформа
+      - generic [ref=e122]: Браузер
+      - generic [ref=e123]: WebGL · Unity 6
+    - generic [ref=e124]:
+      - generic [ref=e125]: Цена
+      - generic [ref=e126]: Бесплатно
+      - generic [ref=e127]: CC BY-NC-SA 4.0
+    - generic [ref=e128]:
+      - generic [ref=e129]: Регистрация
+      - generic [ref=e130]: Не нужна
+      - generic [ref=e131]: одна ссылка, одна кнопка
+  - generic [ref=e133]:
+    - heading "Готов?" [level=2] [ref=e134]
+    - paragraph [ref=e135]: 10 МИНУТ · В БРАУЗЕРЕ · БЕСПЛАТНО
+    - link "Начать игру" [ref=e136] [cursor=pointer]:
+      - /url: ./game/
+      - generic [ref=e137]: Начать игру
+      - generic [ref=e138]: →
+  - generic [ref=e140]:
+    - generic [ref=e142]: ПЕРЕДАТЬ
+    - generic [ref=e143]:
+      - link "Telegram →" [ref=e144] [cursor=pointer]:
+        - /url: https://t.me/share/url?url=https%3A%2F%2Fkloaka.timzinin.com%2F&text=%D0%9A%D0%BB%D0%BE%D0%B0%D0%BA%D0%B0%20%D0%BF%D0%B5%D1%87%D0%B0%D0%BB%D0%B8%20%E2%80%94%20%D1%81%D0%B0%D1%82%D0%B8%D1%80%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B2%D0%B5%D0%B1-%D0%B8%D0%B3%D1%80%D0%B0
+      - link "X / Twitter →" [ref=e145] [cursor=pointer]:
+        - /url: https://twitter.com/intent/tweet?text=%D0%9A%D0%BB%D0%BE%D0%B0%D0%BA%D0%B0%20%D0%BF%D0%B5%D1%87%D0%B0%D0%BB%D0%B8%20%E2%80%94%20%D1%81%D0%B0%D1%82%D0%B8%D1%80%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B2%D0%B5%D0%B1-%D0%B8%D0%B3%D1%80%D0%B0%20https%3A%2F%2Fkloaka.timzinin.com%2F
+      - link "Скопировать ссылку →" [ref=e146] [cursor=pointer]:
+        - /url: "#"
+  - contentinfo [ref=e147]:
+    - generic [ref=e148]:
+      - paragraph [ref=e149]:
+        - text: kloaka.
+        - text: timzinin.
+        - text: com
+      - paragraph [ref=e151]:
+        - text: © 2026 Тимофей Зинин ·
+        - link "@timzinin" [ref=e152] [cursor=pointer]:
+          - /url: https://t.me/timzinin
+        - text: "Лицензия:"
+        - link "CC BY-NC-SA 4.0" [ref=e153] [cursor=pointer]:
+          - /url: ./LICENSE
+        - text: ·
+        - link "Исходники" [ref=e154] [cursor=pointer]:
+          - /url: https://github.com/TimmyZinin/kloaka-art
+        - text: Художественное произведение. Все персонажи, противники и ситуации — собирательные. Любые совпадения с реальными компаниями и сервисами отражают авторскую критику культурного феномена, а не конкретных юридических лиц.

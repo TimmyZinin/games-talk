@@ -1,0 +1,151 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "🔥 Marina on Fire" [ref=e3] [cursor=pointer]:
+      - /url: "#top"
+    - generic [ref=e4]:
+      - link "about" [ref=e5] [cursor=pointer]:
+        - /url: "#about"
+      - link "characters" [ref=e6] [cursor=pointer]:
+        - /url: "#characters"
+      - link "features" [ref=e7] [cursor=pointer]:
+        - /url: "#features"
+      - link "faq" [ref=e8] [cursor=pointer]:
+        - /url: "#faq"
+      - combobox "language" [ref=e9] [cursor=pointer]:
+        - option "🇷🇺 Русский"
+        - option "🇺🇸 English" [selected]
+        - option "🇹🇷 Türkçe"
+        - option "🇧🇷 Português"
+      - link "play →" [ref=e10] [cursor=pointer]:
+        - /url: play.html
+  - generic [ref=e13]:
+    - generic [ref=e14]: 🔥 browser game · free
+    - heading "🔥 Marina on Fire" [level=1] [ref=e15]:
+      - generic [ref=e16]: 🔥
+      - text: Marina
+      - text: on Fire
+    - paragraph [ref=e17]: a text game inside a messenger about a founder's first month. 12 days, $500 in the account, three projects to close — or rent eats it all.
+    - generic [ref=e18]:
+      - generic [ref=e19]: ⏱️ 12–15 minutes
+      - generic [ref=e20]: 💬 text + messenger
+      - generic [ref=e21]: 📱 desktop + mobile
+      - generic [ref=e22]: 🎧 with its own soundtrack
+    - generic [ref=e23]:
+      - link "start the game →" [ref=e24] [cursor=pointer]:
+        - /url: play.html
+        - generic [ref=e25]: start the game
+        - generic [ref=e26]: →
+      - link "what's inside" [ref=e27] [cursor=pointer]:
+        - /url: "#about"
+  - region "скриншоты" [ref=e28]:
+    - generic [ref=e29]:
+      - link "Marina staring at her phone · night the messages don't stop" [ref=e30] [cursor=pointer]:
+        - /url: play.html
+        - img "Marina staring at her phone · night" [ref=e31]
+        - generic [ref=e32]: the messages don't stop
+      - link "Marina's desk · night 3am · two projects left" [ref=e33] [cursor=pointer]:
+        - /url: play.html
+        - img "Marina's desk · night" [ref=e34]
+        - generic [ref=e35]: 3am · two projects left
+      - link "Marina by the window · city at night tomorrow is the last day of the month" [ref=e36] [cursor=pointer]:
+        - /url: play.html
+        - img "Marina by the window · city at night" [ref=e37]
+        - generic [ref=e38]: tomorrow is the last day of the month
+  - generic [ref=e39]:
+    - heading "what's going on here" [level=2] [ref=e40]
+    - paragraph [ref=e41]: "Marina just quit her agency job. Three years writing brand copy, running clients. Two weeks ago she decided: <b>i'll try this on my own</b>. Rented a studio in Bushwick. Told her parents «i'm fine». Opened the laptop."
+    - paragraph [ref=e42]: Nothing is happening. Inbox empty. No one writes. Battery at 20%.
+    - paragraph [ref=e43]: She has <b>12 days</b> and <b>$500</b> in the account. She needs to close <b>3 projects</b> by end of month — or rent eats everything.
+    - paragraph [ref=e44]: Messages land in the «Teledram» messenger. Lucy cheers her on. Anna offers a gig. Tim writes from Kaş. An unhinged landlady threatens a rent hike. Mum asks for meds money. The ex — wants to borrow «for a couple weeks». Denis is inviting her to a sailing trip. You have <b>8 hours a day</b>. What will you get done?
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - generic [ref=e47]: 💬
+        - generic [ref=e48]: messenger as UI
+        - paragraph [ref=e49]: everything in chats. no menus, no tables. just messages.
+      - generic [ref=e50]:
+        - generic [ref=e51]: 🎭
+        - generic [ref=e52]: 24 contacts
+        - paragraph [ref=e53]: 7 key, 6 recurring spammers, 7 one-shots. each with their own tone.
+      - generic [ref=e54]:
+        - generic [ref=e55]: ⏳
+        - generic [ref=e56]: real-time economy
+        - paragraph [ref=e57]: hours, energy, money, hunger, comfort. every choice costs a resource.
+      - generic [ref=e58]:
+        - generic [ref=e59]: 💔
+        - generic [ref=e60]: love arc
+        - paragraph [ref=e61]: Chris isn't just a Hinge match. 8 beats, conflict, resolution, possible love ending.
+      - generic [ref=e62]:
+        - generic [ref=e63]: 🌙
+        - generic [ref=e64]: night shift
+        - paragraph [ref=e65]: after the 8-hour day you can work at night. +progress, −comfort, 20% bug risk, hangover in the morning.
+      - generic [ref=e66]:
+        - generic [ref=e67]: 🎯
+        - generic [ref=e68]: sales funnel
+        - paragraph [ref=e69]: reach_out → discovery → offer → work. Tim sells AI-automation in tiers.
+  - generic [ref=e70]:
+    - heading "who writes to Marina" [level=2] [ref=e71]
+    - generic [ref=e72]:
+      - generic [ref=e73]:
+        - generic [ref=e74]: Л
+        - generic [ref=e75]: Lucy
+        - generic [ref=e76]: ex-coworker · Amsterdam
+        - paragraph [ref=e77]: cheers her on. writes first. sends client leads.
+      - generic [ref=e78]:
+        - generic [ref=e79]: А
+        - generic [ref=e80]: Anna
+        - generic [ref=e81]: first client
+        - paragraph [ref=e82]: two-pager for $200 upfront + $250 on delivery. deadline day 15.
+      - generic [ref=e83]:
+        - generic [ref=e84]: Т
+        - generic [ref=e85]: Tim
+        - generic [ref=e86]: automation consultant · Kaş
+        - paragraph [ref=e87]: "3 tiers of AI-automation: lead farming / discovery calls / offers."
+      - generic [ref=e88]:
+        - generic [ref=e89]: Н
+        - generic [ref=e90]: Mrs. Dagmar
+        - generic [ref=e91]: landlady
+        - paragraph [ref=e92]: through day 12 — absurd demands. then — suddenly waives the rent.
+      - generic [ref=e93]:
+        - generic [ref=e94]: К
+        - generic [ref=e95]: Chris (Hinge)
+        - generic [ref=e96]: Hinge match · dinners
+        - paragraph [ref=e97]: persistent. can turn into a love ending if you play it on trust.
+      - generic [ref=e98]:
+        - generic [ref=e99]: П
+        - generic [ref=e100]: Paul (ex)
+        - generic [ref=e101]: ex · 4 months of silence
+        - paragraph [ref=e102]: asks for $300. flirts. sends memory-lane DMs at night.
+      - generic [ref=e103]:
+        - generic [ref=e104]: Д
+        - generic [ref=e105]: Denis
+        - generic [ref=e106]: friend, party kid
+        - paragraph [ref=e107]: invites to Hamptons trips, rooftops, yacht days. $200-350 a night, but +60 energy.
+      - generic [ref=e108]:
+        - generic [ref=e109]: ♥
+        - generic [ref=e110]: Mum
+        - generic [ref=e111]: always on
+        - paragraph [ref=e112]: calls about meds. invites for Sunday roast. doesn't compare. almost.
+  - generic [ref=e113]:
+    - heading "frequently asked" [level=2] [ref=e114]
+    - generic [ref=e115]:
+      - heading "how long does a playthrough take?" [level=3] [ref=e116]
+      - paragraph [ref=e117]: 30 in-game days ≈ 20-25 real minutes. You can stop anytime — autosave.
+    - generic [ref=e118]:
+      - heading "can you lose?" [level=3] [ref=e119]
+      - paragraph [ref=e120]: Yes. Run out of money (<-$1500), don't eat for 4 days (hunger=0), or comfort near zero after day 15 — the game can end. Odds aren't 100%, but real.
+    - generic [ref=e121]:
+      - heading "it's a lead magnet — then what?" [level=3] [ref=e122]
+      - paragraph [ref=e123]: On day 28, Tim (the real Tim Zinin) writes from inside the game. You can fill out a form and get a personal AI audit.
+    - generic [ref=e124]:
+      - heading "why a messenger UI?" [level=3] [ref=e125]
+      - paragraph [ref=e126]: Because a founder lives in chats. Email, slack, telegram, discord — all through the messenger. The game is about right now.
+    - generic [ref=e127]:
+      - heading "is there a desktop version?" [level=3] [ref=e128]
+      - paragraph [ref=e129]: It runs in the browser on any device. On desktop — keyboard shortcuts (1-9 for actions, Space = end of day).
+    - generic [ref=e130]:
+      - heading "is it free?" [level=3] [ref=e131]
+      - paragraph [ref=e132]: Yes. Open source (MPL-2.0), fork of A Dark Room. No microtransactions or subscriptions.
+  - contentinfo [ref=e133]:
+    - paragraph [ref=e134]: v2.8.0 survival · <a href="/marina-terminal/">terminal version</a> · <a href="/marina/">v1.6a live</a>
+    - paragraph [ref=e135]: lead-magnet game by <a href="https://t.me/timofeyzinin" target="_blank" rel="noopener">@timofeyzinin</a>
+    - paragraph [ref=e136]: MPL-2.0 · fork of <a href="https://github.com/doublespeakgames/adarkroom" target="_blank" rel="noopener">A Dark Room</a> · <a href="https://github.com/TimmyZinin/marina-v-ogne" target="_blank" rel="noopener">source</a>
